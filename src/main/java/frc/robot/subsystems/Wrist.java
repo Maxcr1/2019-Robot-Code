@@ -65,33 +65,36 @@ public class Wrist extends Subsystem {
 
         lastPos = wristMotor.getSelectedSensorPosition();
 
+        SmartDashboard.putBoolean("Enable Wrist", true);
     }
 
 
     void handle(SuperstructureCommand sCommand) {
 
-        if(sCommand.getEmergencyCommand().getTrigger()){
-            wristMotor.set(ControlMode.PercentOutput, sCommand.getEmergencyCommand().getWristVal());
-            lastPos = wristMotor.getSelectedSensorPosition();
-            SmartDashboard.putNumber("State", 1);
-            isManual = true;
-        }
-        else if(sCommand.getScoreState().isNewState()){
-            wristMotor.set(ControlMode.MotionMagic, sCommand.getScoreState().getWristDesiredPos());
-            SmartDashboard.putNumber("Wrist Desired Position", sCommand.getScoreState().getWristDesiredPos());
-            SmartDashboard.putNumber("State", 2);
-            isManual = false;
-        }
-        else if(isManual){
-            wristMotor.set(ControlMode.MotionMagic, lastPos);
-            SmartDashboard.putNumber("Wrist Desired Position", lastPos);
-            SmartDashboard.putNumber("State", 3);
-        }
-        else{
-            wristMotor.set(ControlMode.MotionMagic, sCommand.getScoreState().getWristDesiredPos());
-            SmartDashboard.putNumber("Wrist Desired Position", sCommand.getScoreState().getWristDesiredPos());
-            SmartDashboard.putNumber("State", 4);
-            isManual = false;
+        if(SmartDashboard.getBoolean("Enable Wrist", true)) {
+            if(sCommand.getEmergencyCommand().getTrigger()){
+                wristMotor.set(ControlMode.PercentOutput, sCommand.getEmergencyCommand().getWristVal());
+                lastPos = wristMotor.getSelectedSensorPosition();
+                SmartDashboard.putNumber("State", 1);
+                isManual = true;
+            }
+            else if(sCommand.getScoreState().isNewState()){
+                wristMotor.set(ControlMode.MotionMagic, sCommand.getScoreState().getWristDesiredPos());
+                SmartDashboard.putNumber("Wrist Desired Position", sCommand.getScoreState().getWristDesiredPos());
+                SmartDashboard.putNumber("State", 2);
+                isManual = false;
+            }
+            else if(isManual){
+                wristMotor.set(ControlMode.MotionMagic, lastPos);
+                SmartDashboard.putNumber("Wrist Desired Position", lastPos);
+                SmartDashboard.putNumber("State", 3);
+            }
+            else{
+                wristMotor.set(ControlMode.MotionMagic, sCommand.getScoreState().getWristDesiredPos());
+                SmartDashboard.putNumber("Wrist Desired Position", sCommand.getScoreState().getWristDesiredPos());
+                SmartDashboard.putNumber("State", 4);
+                isManual = false;
+            }
         }
 
         SmartDashboard.putNumber("Wrist Actual Position Angle", wristMotor.getSelectedSensorPosition());

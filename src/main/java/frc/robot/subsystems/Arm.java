@@ -58,7 +58,7 @@ public class Arm extends Subsystem{
         arm.configMotionCruiseVelocity(Constants.armMaxVel, Constants.armTimeoutMs);
         arm.configMotionAcceleration(Constants.armMaxAccel, Constants.armTimeoutMs);
 
-
+        SmartDashboard.putBoolean("Enable Arm", true);
     }
 
     void handle(SuperstructureCommand sCommand) {
